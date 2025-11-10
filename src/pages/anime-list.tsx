@@ -5,9 +5,11 @@ import {
   fetchTopAnimeAsync,
   setPage,
   setQuery,
+  setFilters,
   cancelSearch,
 } from '../store/slices/animeSlice';
 import { SearchBar } from '../components/app/search-bar';
+import { AnimeFilters } from '../components/app/anime-filters';
 import { AnimeCard } from '../components/app/anime-card';
 import { Pagination } from '../components/app/pagination';
 import { LoadingSkeleton } from '../components/app/loading-skeleton';
@@ -24,11 +26,12 @@ function AnimeListPage() {
     loading,
     error,
     hasSearched,
+    filters,
   } = useAppSelector((state) => state.anime);
 
   useEffect(() => {
     if (!query.trim() && !hasSearched && results.length === 0) {
-      dispatch(fetchTopAnimeAsync(1));
+      dispatch(fetchTopAnimeAsync({ page: 1, filters }));
     }
 
     return () => {
@@ -41,27 +44,61 @@ function AnimeListPage() {
     dispatch(setPage(1));
 
     if (searchQuery.trim()) {
-      dispatch(searchAnimeAsync({ query: searchQuery.trim(), page: 1 }));
+      dispatch(
+        searchAnimeAsync({
+          query: searchQuery.trim(),
+          page: 1,
+          filters,
+        })
+      );
     } else {
-      dispatch(fetchTopAnimeAsync(1));
+      dispatch(fetchTopAnimeAsync({ page: 1, filters }));
     }
   };
 
   const handlePageChange = (page: number) => {
     dispatch(setPage(page));
     if (query.trim()) {
-      dispatch(searchAnimeAsync({ query: query.trim(), page }));
+      dispatch(searchAnimeAsync({ query: query.trim(), page, filters }));
     } else {
-      dispatch(fetchTopAnimeAsync(page));
+      dispatch(fetchTopAnimeAsync({ page, filters }));
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleRetry = () => {
     if (query.trim()) {
-      dispatch(searchAnimeAsync({ query: query.trim(), page: currentPage }));
+      dispatch(
+        searchAnimeAsync({ query: query.trim(), page: currentPage, filters })
+      );
     } else {
-      dispatch(fetchTopAnimeAsync(currentPage));
+      dispatch(fetchTopAnimeAsync({ page: currentPage, filters }));
+    }
+  };
+
+  const handleFilterChange = (
+    filterType: 'status' | 'type' | 'rating',
+    value: string
+  ) => {
+    dispatch(setFilters({ [filterType]: value }));
+    dispatch(setPage(1));
+
+    // Trigger search/fetch with new filters
+    if (query.trim()) {
+      dispatch(
+        searchAnimeAsync({
+          query: query.trim(),
+          page: 1,
+          filters: { ...filters, [filterType]: value },
+        })
+      );
+    } else {
+      dispatch(
+        fetchTopAnimeAsync({
+          page: 1,
+          filters: { ...filters, [filterType]: value },
+        })
+      );
     }
   };
 
@@ -76,12 +113,23 @@ function AnimeListPage() {
             Embark on a quest through worlds unknown—summon a new obsession with
             every search!
           </p>
-          <SearchBar
-            value={query}
-            onChange={handleSearchChange}
-            placeholder='Search for anime...'
-            debounceMs={250}
-          />
+          <div className='grid grid-cols-6 align-top gap-x-2'>
+            <SearchBar
+              value={query}
+              onChange={handleSearchChange}
+              placeholder='Search for anime...'
+              debounceMs={250}
+            />
+
+            <AnimeFilters
+              status={filters.status}
+              type={filters.type}
+              rating={filters.rating}
+              onStatusChange={(value) => handleFilterChange('status', value)}
+              onTypeChange={(value) => handleFilterChange('type', value)}
+              onRatingChange={(value) => handleFilterChange('rating', value)}
+            />
+          </div>
         </div>
 
         {loading && (

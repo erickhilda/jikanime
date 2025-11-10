@@ -63,28 +63,22 @@ npm run preview
 
 ```
 src/
-├── components/        # Reusable UI components
-│   ├── ui/           # Base UI components (Button, Card, Input)
-│   ├── SearchBar.tsx
-│   ├── AnimeCard.tsx
-│   ├── Pagination.tsx
-│   ├── LoadingSkeleton.tsx
-│   ├── EmptyState.tsx
-│   └── ErrorMessage.tsx
-├── pages/            # Page components
-│   ├── anime-list.tsx
-│   └── anime-details.tsx
-├── store/            # Redux store configuration
-│   ├── store.ts
-│   ├── hooks.ts
-│   └── slices/
-│       ├── animeSlice.ts
-│       └── animeDetailsSlice.ts
-├── services/         # API service layer
+├── components/            # Reusable UI components
+│   ├── ui/                # Base UI components (Button, Card, Input)
+│   └── app/               # App-specific components (SearchBar, AnimeCard, Pagination, LoadingSkeleton, EmptyState, ErrorMessage)
+├── pages/                 # Page components
+│   ├── anime-list.tsx     # Anime list page
+│   └── anime-details.tsx  # Anime details page
+├── store/                 # Redux store configuration
+│   ├── store.ts           # Redux store configuration
+│   ├── hooks.ts           # Redux hooks
+│   └── slices/            # Redux slices
+│       ├── animeSlice.ts  # Anime slice
+│       └── animeDetailsSlice.ts # Anime details slice
+├── services/              # API service layer
 │   └── jikanApi.ts
-├── types/            # TypeScript type definitions
-│   └── anime.ts
-└── App.tsx           # Main app component
+├── types/                 # TypeScript type definitions
+└── App.tsx                # Main app component
 ```
 
 ## Submission Checklist
