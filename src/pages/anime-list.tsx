@@ -16,11 +16,17 @@ import { ErrorMessage } from '../components/app/error-message';
 
 function AnimeListPage() {
   const dispatch = useAppDispatch();
-  const { results, currentPage, totalPages, query, loading, error, hasSearched } =
-    useAppSelector((state) => state.anime);
+  const {
+    results,
+    currentPage,
+    totalPages,
+    query,
+    loading,
+    error,
+    hasSearched,
+  } = useAppSelector((state) => state.anime);
 
   useEffect(() => {
-    // Load top anime on initial mount if no search query
     if (!query.trim() && !hasSearched && results.length === 0) {
       dispatch(fetchTopAnimeAsync(1));
     }
@@ -28,8 +34,7 @@ function AnimeListPage() {
     return () => {
       dispatch(cancelSearch());
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount
+  }, []);
 
   const handleSearchChange = (searchQuery: string) => {
     dispatch(setQuery(searchQuery));
@@ -38,7 +43,6 @@ function AnimeListPage() {
     if (searchQuery.trim()) {
       dispatch(searchAnimeAsync({ query: searchQuery.trim(), page: 1 }));
     } else {
-      // When search is cleared, show top anime again
       dispatch(fetchTopAnimeAsync(1));
     }
   };
@@ -62,47 +66,50 @@ function AnimeListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-center">Unleash Your Anime Curiosity</h1>
-          <p className="text-center text-foreground/70 mb-6">
-            Embark on a quest through worlds unknown—summon a new obsession with every search!
+    <div className='min-h-screen bg-white'>
+      <div className='container mx-auto px-4 py-8'>
+        <div className='mb-8'>
+          <h1 className='text-4xl font-bold mb-2 text-center'>
+            Unleash Your Anime Curiosity
+          </h1>
+          <p className='text-center text-foreground/70 mb-6'>
+            Embark on a quest through worlds unknown—summon a new obsession with
+            every search!
           </p>
           <SearchBar
             value={query}
             onChange={handleSearchChange}
-            placeholder="Search for anime..."
+            placeholder='Search for anime...'
             debounceMs={250}
           />
         </div>
 
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
             <LoadingSkeleton count={20} />
           </div>
         )}
 
         {error && !loading && (
-          <div className="py-8">
+          <div className='py-8'>
             <ErrorMessage message={error} onRetry={handleRetry} />
           </div>
         )}
 
         {!loading && !error && hasSearched && results.length === 0 && (
           <EmptyState
-            message="No anime found"
-            submessage="Try searching with different keywords"
+            message='No anime found'
+            submessage='Try searching with different keywords'
           />
         )}
 
         {!loading && !error && results.length > 0 && (
           <>
-            <div className="mb-6 text-sm text-foreground/70">
+            <div className='mb-6 text-sm text-foreground/70'>
               {hasSearched ? (
                 <>
-                  Found {results.length} result{results.length !== 1 ? 's' : ''} on
-                  page {currentPage} of {totalPages}
+                  Found {results.length} result{results.length !== 1 ? 's' : ''}{' '}
+                  on page {currentPage} of {totalPages}
                 </>
               ) : (
                 <>
@@ -110,7 +117,7 @@ function AnimeListPage() {
                 </>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8'>
               {results.map((anime) => (
                 <AnimeCard key={anime.mal_id} anime={anime} />
               ))}

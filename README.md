@@ -22,11 +22,13 @@ A React-based anime search application built with TypeScript, Redux, and the Jik
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -85,6 +87,24 @@ src/
 └── App.tsx           # Main app component
 ```
 
+## Submission Checklist
+
+Before submitting, ensure:
+
+- [x] Project uses npm only (no yarn/pnpm)
+- [x] `npm install` and `npm run dev` starts the app successfully
+- [x] Dev server runs on port 4000
+- [x] No environment variables required
+- [x] Project is deployed and accessible via live URL [https://jikanime.pages.dev/](https://jikanime.pages.dev/)
+- [x] All core functionality works as described
+  - [x] Instant search
+  - [x] Display search results
+  - [x] Server-side pagination
+  - [x] Anime details
+- [x] Code is written in TypeScript
+- [x] Redux is properly implemented for state management
+- [x] If bonus features implemented, they are listed in README under "Bonus Implementation" header
+
 ## Bonus Implementation
 
 The following bonus features have been implemented to enhance the user experience:
@@ -92,7 +112,7 @@ The following bonus features have been implemented to enhance the user experienc
 ### User Experience Enhancements
 
 1. **Skeleton Loaders**: Animated skeleton loaders displayed during data fetching to provide visual feedback
-2. **Empty States**: Helpful empty state messages when no results are found or when the user hasn't searched yet
+2. **Empty States**: Helpful empty state messages when no results are found
 3. **Error Handling**: Comprehensive error handling with user-friendly error messages and retry functionality
 4. **Mobile Responsive Design**: Fully responsive layout that adapts to different screen sizes (mobile, tablet, desktop)
 5. **Smooth Animations**: Hover effects and transitions for better interactivity
@@ -111,7 +131,3 @@ The following bonus features have been implemented to enhance the user experienc
 ## API Information
 
 This app uses the [Jikan API](https://docs.api.jikan.moe/) - a free, open-source API for MyAnimeList data. No authentication is required.
-
-## License
-
-This project is created for interview purposes.

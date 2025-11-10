@@ -6,7 +6,12 @@ import {
   clearDetails,
   cancelDetailsFetch,
 } from '../store/slices/animeDetailsSlice';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card';
 import Button from '../components/ui/button/button';
 import { ErrorMessage } from '../components/app/error-message';
 import { ArrowLeft, Star, Calendar, Tv, Clock, Users } from 'lucide-react';
@@ -14,11 +19,11 @@ import { ArrowLeft, Star, Calendar, Tv, Clock, Users } from 'lucide-react';
 const BackButton = ({ handleBack }: { handleBack: () => void }) => {
   return (
     <Button
-      variant="neutral"
+      variant='neutral'
       onClick={handleBack}
-      className="mb-6 flex items-center gap-2"
+      className='mb-6 flex items-center gap-2'
     >
-      <ArrowLeft className="w-4 h-4" />
+      <ArrowLeft className='w-4 h-4' />
       Back to Search
     </Button>
   );
@@ -28,7 +33,9 @@ function AnimeDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { anime, loading, error } = useAppSelector((state) => state.animeDetails);
+  const { anime, loading, error } = useAppSelector(
+    (state) => state.animeDetails
+  );
 
   useEffect(() => {
     if (id) {
@@ -59,13 +66,13 @@ function AnimeDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
+      <div className='min-h-screen bg-background'>
+        <div className='container mx-auto px-4 py-8'>
           <BackButton handleBack={handleBack} />
-          <div className="flex items-center justify-center py-16">
-            <div className="text-center">
-              <div className="w-16 h-16 border-4 border-main border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-foreground/70">Loading anime details...</p>
+          <div className='flex items-center justify-center py-16'>
+            <div className='text-center'>
+              <div className='w-16 h-16 border-4 border-main border-t-transparent rounded-full animate-spin mx-auto mb-4' />
+              <p className='text-foreground/70'>Loading anime details...</p>
             </div>
           </div>
         </div>
@@ -75,9 +82,8 @@ function AnimeDetailsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-
+      <div className='min-h-screen bg-background'>
+        <div className='container mx-auto px-4 py-8'>
           <ErrorMessage message={error} onRetry={handleRetry} />
         </div>
       </div>
@@ -86,119 +92,122 @@ function AnimeDetailsPage() {
 
   if (!anime) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
+      <div className='min-h-screen bg-background'>
+        <div className='container mx-auto px-4 py-8'>
           <BackButton handleBack={handleBack} />
-          <div className="text-center py-16">
-            <p className="text-foreground/70">Anime not found</p>
+          <div className='text-center py-16'>
+            <p className='text-foreground/70'>Anime not found</p>
           </div>
         </div>
       </div>
     );
   }
 
-  const imageUrl = anime.images.jpg.large_image_url || anime.images.jpg.image_url;
+  const imageUrl =
+    anime.images.jpg.large_image_url || anime.images.jpg.image_url;
   const title = anime.title_english || anime.title || 'Untitled';
   const titleJapanese = anime.title_japanese;
   const score = anime.score ? anime.score.toFixed(1) : 'N/A';
   const synopsis = anime.synopsis || 'No synopsis available.';
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <div className='min-h-screen bg-background'>
+      <div className='container mx-auto px-4 py-8'>
         <BackButton handleBack={handleBack} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <Card className="sticky top-8 py-0">
-              <div className="relative w-full aspect-[3/4] overflow-hidden bg-secondary-background rounded-t-base">
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+          <div className='lg:col-span-1'>
+            <Card className='sticky top-8 py-0'>
+              <div className='relative w-full aspect-[3/4] overflow-hidden bg-secondary-background rounded-t-base'>
                 {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt={title}
-                    className="w-full h-full object-cover"
+                    className='w-full h-full object-cover'
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-foreground/50">
+                  <div className='w-full h-full flex items-center justify-center text-foreground/50'>
                     No Image
                   </div>
                 )}
               </div>
               <CardContent>
                 {anime.score && (
-                  <div className="flex items-center gap-1 mb-4">
-                    <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
-                    <span className="text-2xl font-bold">{score}</span>
-                    <span className="text-foreground/70">
+                  <div className='flex items-center gap-1 mb-4'>
+                    <Star className='w-5 h-5 fill-yellow-500 text-yellow-500' />
+                    <span className='text-2xl font-bold'>{score}</span>
+                    <span className='text-foreground/70'>
                       ({anime.scored_by?.toLocaleString()} votes)
                     </span>
                   </div>
                 )}
 
-                <div className="space-y-3 text-sm">
+                <div className='space-y-3 text-sm'>
                   {anime.type && (
-                    <div className="flex items-center gap-2">
-                      <Tv className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Type:</span>
-                      <span className="font-semibold">{anime.type}</span>
+                    <div className='flex items-center gap-2'>
+                      <Tv className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Type:</span>
+                      <span className='font-semibold'>{anime.type}</span>
                     </div>
                   )}
 
                   {anime.episodes && (
-                    <div className="flex items-center gap-2">
-                      <Tv className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Episodes:</span>
-                      <span className="font-semibold">{anime.episodes}</span>
+                    <div className='flex items-center gap-2'>
+                      <Tv className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Episodes:</span>
+                      <span className='font-semibold'>{anime.episodes}</span>
                     </div>
                   )}
 
                   {anime.duration && (
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Duration:</span>
-                      <span className="font-semibold">{anime.duration}</span>
+                    <div className='flex items-center gap-2'>
+                      <Clock className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Duration:</span>
+                      <span className='font-semibold'>{anime.duration}</span>
                     </div>
                   )}
 
                   {anime.status && (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Status:</span>
-                      <span className="font-semibold">{anime.status}</span>
+                    <div className='flex items-center gap-2'>
+                      <Calendar className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Status:</span>
+                      <span className='font-semibold'>{anime.status}</span>
                     </div>
                   )}
 
                   {anime.aired?.string && (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Aired:</span>
-                      <span className="font-semibold">{anime.aired.string}</span>
+                    <div className='flex items-center gap-2'>
+                      <Calendar className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Aired:</span>
+                      <span className='font-semibold'>
+                        {anime.aired.string}
+                      </span>
                     </div>
                   )}
 
                   {anime.members && (
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Members:</span>
-                      <span className="font-semibold">
+                    <div className='flex items-center gap-2'>
+                      <Users className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Members:</span>
+                      <span className='font-semibold'>
                         {anime.members.toLocaleString()}
                       </span>
                     </div>
                   )}
 
                   {anime.rank && (
-                    <div className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Rank:</span>
-                      <span className="font-semibold">#{anime.rank}</span>
+                    <div className='flex items-center gap-2'>
+                      <Star className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Rank:</span>
+                      <span className='font-semibold'>#{anime.rank}</span>
                     </div>
                   )}
 
                   {anime.popularity && (
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-foreground/50" />
-                      <span className="text-foreground/70">Popularity:</span>
-                      <span className="font-semibold">#{anime.popularity}</span>
+                    <div className='flex items-center gap-2'>
+                      <Users className='w-4 h-4 text-foreground/50' />
+                      <span className='text-foreground/70'>Popularity:</span>
+                      <span className='font-semibold'>#{anime.popularity}</span>
                     </div>
                   )}
                 </div>
@@ -206,25 +215,25 @@ function AnimeDetailsPage() {
             </Card>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className='lg:col-span-2'>
             <Card>
               <CardHeader>
-                <CardTitle className="text-3xl mb-2">{title}</CardTitle>
+                <CardTitle className='text-3xl mb-2'>{title}</CardTitle>
                 {titleJapanese && (
-                  <p className="text-lg text-foreground/70">{titleJapanese}</p>
+                  <p className='text-lg text-foreground/70'>{titleJapanese}</p>
                 )}
                 {anime.title_synonyms && anime.title_synonyms.length > 0 && (
-                  <p className="text-sm text-foreground/60 mt-2">
+                  <p className='text-sm text-foreground/60 mt-2'>
                     Also known as: {anime.title_synonyms.join(', ')}
                   </p>
                 )}
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
+                <div className='space-y-6'>
                   {synopsis && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Synopsis</h3>
-                      <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
+                      <h3 className='text-xl font-semibold mb-3'>Synopsis</h3>
+                      <p className='text-foreground/80 leading-relaxed whitespace-pre-line'>
                         {synopsis}
                       </p>
                     </div>
@@ -232,8 +241,8 @@ function AnimeDetailsPage() {
 
                   {anime.background && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Background</h3>
-                      <p className="text-foreground/80 leading-relaxed whitespace-pre-line">
+                      <h3 className='text-xl font-semibold mb-3'>Background</h3>
+                      <p className='text-foreground/80 leading-relaxed whitespace-pre-line'>
                         {anime.background}
                       </p>
                     </div>
@@ -241,12 +250,12 @@ function AnimeDetailsPage() {
 
                   {anime.genres && anime.genres.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Genres</h3>
-                      <div className="flex flex-wrap gap-2">
+                      <h3 className='text-xl font-semibold mb-3'>Genres</h3>
+                      <div className='flex flex-wrap gap-2'>
                         {anime.genres.map((genre) => (
                           <span
                             key={genre.mal_id}
-                            className="px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm"
+                            className='px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm'
                           >
                             {genre.name}
                           </span>
@@ -257,12 +266,12 @@ function AnimeDetailsPage() {
 
                   {anime.studios && anime.studios.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Studios</h3>
-                      <div className="flex flex-wrap gap-2">
+                      <h3 className='text-xl font-semibold mb-3'>Studios</h3>
+                      <div className='flex flex-wrap gap-2'>
                         {anime.studios.map((studio) => (
                           <span
                             key={studio.mal_id}
-                            className="px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm"
+                            className='px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm'
                           >
                             {studio.name}
                           </span>
@@ -273,12 +282,12 @@ function AnimeDetailsPage() {
 
                   {anime.producers && anime.producers.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Producers</h3>
-                      <div className="flex flex-wrap gap-2">
+                      <h3 className='text-xl font-semibold mb-3'>Producers</h3>
+                      <div className='flex flex-wrap gap-2'>
                         {anime.producers.map((producer) => (
                           <span
                             key={producer.mal_id}
-                            className="px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm"
+                            className='px-3 py-1 rounded-full bg-secondary-background text-foreground/80 text-sm'
                           >
                             {producer.name}
                           </span>
@@ -289,15 +298,15 @@ function AnimeDetailsPage() {
 
                   {anime.source && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Source</h3>
-                      <p className="text-foreground/80">{anime.source}</p>
+                      <h3 className='text-xl font-semibold mb-3'>Source</h3>
+                      <p className='text-foreground/80'>{anime.source}</p>
                     </div>
                   )}
 
                   {anime.rating && (
                     <div>
-                      <h3 className="text-xl font-semibold mb-3">Rating</h3>
-                      <p className="text-foreground/80">{anime.rating}</p>
+                      <h3 className='text-xl font-semibold mb-3'>Rating</h3>
+                      <p className='text-foreground/80'>{anime.rating}</p>
                     </div>
                   )}
                 </div>
