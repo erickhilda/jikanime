@@ -23,3 +23,8 @@
    - **prompt**: "Now since we already have filter, and filter by rating include an NSFW or adult content. I want to add warning or precaution when user selecting those option as filter.
      so display a warning dialog that state the content might contain NSFW content. and only proceed if they check the understand, and state they are above 18. store this state on the browser so we didn't need to ask everytime."
    - **result**: get the working code to add a dialog to warn user about the NSFW content. This work garcefully in one shot. so justr need to confirm the functionality.
+
+8. Add functionality to display anime details page.
+   - **context**: anime details page
+   - **prompt**: "Now I want to display the anime details page. This page will display the details of the anime. It will display the title, image, description, episodes, duration, status, aired, members, rank, score, and more. This page will also display the relations of the anime, and the videos of the anime."
+   - **result**: get the working code to display the anime details page. This work garcefully in one shot. but still need some fix related to data validation and error handling.
