@@ -1,0 +1,117 @@
+# Anime Search App
+
+A React-based anime search application built with TypeScript, Redux, and the Jikan API. Search for anime, browse results with pagination, and view detailed information about your favorite shows.
+
+## Features
+
+- **Instant Search**: Debounced search (250ms) for responsive user experience
+- **Server-side Pagination**: Efficient pagination with the Jikan API
+- **Anime Details**: Comprehensive detail pages with synopsis, genres, studios, and more
+- **Redux State Management**: Centralized state management with Redux Toolkit
+- **TypeScript**: Fully typed codebase for better developer experience
+- **Responsive Design**: Mobile-first design that works on all devices
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js >= 22.0.0
+- npm >= 10.0.0
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:4000`
+
+The app should now be running and ready to use!
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Tech Stack
+
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Redux Toolkit** - State management
+- **React Router DOM** - Navigation
+- **Tailwind CSS** - Styling
+- **Vite** - Build tool
+- **Jikan API** - Anime data source
+
+## Project Structure
+
+```
+src/
+├── components/        # Reusable UI components
+│   ├── ui/           # Base UI components (Button, Card, Input)
+│   ├── SearchBar.tsx
+│   ├── AnimeCard.tsx
+│   ├── Pagination.tsx
+│   ├── LoadingSkeleton.tsx
+│   ├── EmptyState.tsx
+│   └── ErrorMessage.tsx
+├── pages/            # Page components
+│   ├── anime-list.tsx
+│   └── anime-details.tsx
+├── store/            # Redux store configuration
+│   ├── store.ts
+│   ├── hooks.ts
+│   └── slices/
+│       ├── animeSlice.ts
+│       └── animeDetailsSlice.ts
+├── services/         # API service layer
+│   └── jikanApi.ts
+├── types/            # TypeScript type definitions
+│   └── anime.ts
+└── App.tsx           # Main app component
+```
+
+## Bonus Implementation
+
+The following bonus features have been implemented to enhance the user experience:
+
+### User Experience Enhancements
+
+1. **Skeleton Loaders**: Animated skeleton loaders displayed during data fetching to provide visual feedback
+2. **Empty States**: Helpful empty state messages when no results are found or when the user hasn't searched yet
+3. **Error Handling**: Comprehensive error handling with user-friendly error messages and retry functionality
+4. **Mobile Responsive Design**: Fully responsive layout that adapts to different screen sizes (mobile, tablet, desktop)
+5. **Smooth Animations**: Hover effects and transitions for better interactivity
+6. **Loading States**: Clear loading indicators for both search and detail pages
+7. **Request Cancellation**: In-flight API requests are automatically cancelled when new searches are initiated to prevent race conditions
+
+### Technical Excellence
+
+1. **Race Condition Handling**: Proper handling of race conditions by cancelling previous requests when new ones are made
+2. **Error Recovery**: Retry functionality for failed API requests
+3. **TypeScript Best Practices**: Minimal use of `any` types, comprehensive type definitions for all API responses
+4. **Code Organization**: Clean separation of concerns with dedicated folders for components, pages, store, services, and types
+5. **Reusable Components**: Modular component architecture for easy maintenance and extension
+6. **Debounced Search**: Efficient debouncing implementation (250ms) to reduce API calls while maintaining responsiveness
+
+## API Information
+
+This app uses the [Jikan API](https://docs.api.jikan.moe/) - a free, open-source API for MyAnimeList data. No authentication is required.
+
+## License
+
+This project is created for interview purposes.
