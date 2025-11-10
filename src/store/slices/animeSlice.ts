@@ -11,6 +11,11 @@ interface AnimeState {
   loading: boolean;
   error: string | null;
   hasSearched: boolean;
+  filters: {
+    status: string;
+    type: string;
+    rating: string;
+  };
 }
 
 const initialState: AnimeState = {
@@ -21,6 +26,11 @@ const initialState: AnimeState = {
   loading: false,
   error: null,
   hasSearched: false,
+  filters: {
+    status: '',
+    type: '',
+    rating: '',
+  },
 };
 
 let abortController: AbortController | null = null;
@@ -28,7 +38,15 @@ let abortController: AbortController | null = null;
 export const searchAnimeAsync = createAsyncThunk(
   'anime/search',
   async (
-    { query, page = 1 }: { query: string; page?: number },
+    {
+      query,
+      page = 1,
+      filters,
+    }: {
+      query: string;
+      page?: number;
+      filters?: { status: string; type: string; rating: string };
+    },
     { rejectWithValue }
   ) => {
     // Cancel previous request if any
@@ -43,6 +61,7 @@ export const searchAnimeAsync = createAsyncThunk(
       const response = await searchAnime({
         query,
         page,
+        filters,
         signal: abortController.signal,
       });
       return response;
@@ -61,7 +80,16 @@ export const searchAnimeAsync = createAsyncThunk(
 
 export const fetchTopAnimeAsync = createAsyncThunk(
   'anime/fetchTop',
-  async (page: number = 1, { rejectWithValue }) => {
+  async (
+    {
+      page = 1,
+      filters,
+    }: {
+      page?: number;
+      filters?: { status: string; type: string; rating: string };
+    },
+    { rejectWithValue }
+  ) => {
     // Cancel previous request if any
     if (abortController) {
       abortController.abort();
@@ -71,7 +99,7 @@ export const fetchTopAnimeAsync = createAsyncThunk(
     abortController = new AbortController();
 
     try {
-      const response = await getTopAnime(page, abortController.signal);
+      const response = await getTopAnime(page, filters, abortController.signal);
       return response;
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
@@ -95,6 +123,31 @@ const animeSlice = createSlice({
     },
     setQuery: (state, action: PayloadAction<string>) => {
       state.query = action.payload;
+    },
+    setFilters: (
+      state,
+      action: PayloadAction<{
+        status?: string;
+        type?: string;
+        rating?: string;
+      }>
+    ) => {
+      if (action.payload.status !== undefined) {
+        state.filters.status = action.payload.status;
+      }
+      if (action.payload.type !== undefined) {
+        state.filters.type = action.payload.type;
+      }
+      if (action.payload.rating !== undefined) {
+        state.filters.rating = action.payload.rating;
+      }
+    },
+    clearFilters: (state) => {
+      state.filters = {
+        status: '',
+        type: '',
+        rating: '',
+      };
     },
     clearResults: (state) => {
       state.results = [];
@@ -156,7 +209,12 @@ const animeSlice = createSlice({
   },
 });
 
-export const { setPage, setQuery, clearResults, cancelSearch } =
-  animeSlice.actions;
+export const {
+  setPage,
+  setQuery,
+  setFilters,
+  clearFilters,
+  clearResults,
+  cancelSearch,
+} = animeSlice.actions;
 export default animeSlice.reducer;
-

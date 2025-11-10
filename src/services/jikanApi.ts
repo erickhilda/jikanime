@@ -5,6 +5,11 @@ const BASE_URL = 'https://api.jikan.moe/v4';
 export interface SearchParams {
   query: string;
   page?: number;
+  filters?: {
+    status?: string;
+    type?: string;
+    rating?: string;
+  };
   signal?: AbortSignal;
 }
 
@@ -16,12 +21,25 @@ export interface ApiError {
 export async function searchAnime({
   query,
   page = 1,
+  filters,
   signal,
 }: SearchParams): Promise<SearchResponse> {
   const url = new URL(`${BASE_URL}/anime`);
   url.searchParams.set('q', query);
   url.searchParams.set('page', page.toString());
-  url.searchParams.set('limit', '20');
+  url.searchParams.set('limit', '15');
+
+  if (filters) {
+    if (filters.status) {
+      url.searchParams.set('status', filters.status);
+    }
+    if (filters.type) {
+      url.searchParams.set('type', filters.type);
+    }
+    if (filters.rating) {
+      url.searchParams.set('rating', filters.rating);
+    }
+  }
 
   const response = await fetch(url.toString(), { signal });
 
@@ -57,11 +75,28 @@ export async function getAnimeDetails(
 
 export async function getTopAnime(
   page = 1,
+  filters?: {
+    status?: string;
+    type?: string;
+    rating?: string;
+  },
   signal?: AbortSignal
 ): Promise<SearchResponse> {
   const url = new URL(`${BASE_URL}/top/anime`);
   url.searchParams.set('page', page.toString());
-  url.searchParams.set('limit', '20');
+  url.searchParams.set('limit', '15');
+
+  if (filters) {
+    if (filters.status) {
+      url.searchParams.set('status', filters.status);
+    }
+    if (filters.type) {
+      url.searchParams.set('type', filters.type);
+    }
+    if (filters.rating) {
+      url.searchParams.set('rating', filters.rating);
+    }
+  }
 
   const response = await fetch(url.toString(), { signal });
 
@@ -76,4 +111,3 @@ export async function getTopAnime(
   const data: SearchResponse = await response.json();
   return data;
 }
-
