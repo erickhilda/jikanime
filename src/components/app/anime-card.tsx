@@ -56,9 +56,13 @@ export function AnimeCard({ anime }: AnimeCardProps) {
           {anime.year && <span>• {anime.year}</span>}
         </div>
         {anime.genres && anime.genres.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
+          <div className='flex flex-wrap gap-1 mt-2'>
             {anime.genres.slice(0, 3).map((genre) => (
-              <Badge variant='neutral' className='text-xs px-2 py-1 rounded-full bg-secondary-background text-foreground/80'> 
+              <Badge
+                key={genre.name}
+                variant='neutral'
+                className='text-xs px-2 py-1 rounded-full bg-secondary-background text-foreground/80'
+              >
                 {genre.name}
               </Badge>
             ))}
