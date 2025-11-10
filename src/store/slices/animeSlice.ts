@@ -15,6 +15,7 @@ interface AnimeState {
     status: string;
     type: string;
     rating: string;
+    genres: number[];
   };
 }
 
@@ -30,6 +31,7 @@ const initialState: AnimeState = {
     status: '',
     type: '',
     rating: '',
+    genres: [],
   },
 };
 
@@ -42,10 +44,15 @@ export const searchAnimeAsync = createAsyncThunk(
       query,
       page = 1,
       filters,
-    }: {
+    }:     {
       query: string;
       page?: number;
-      filters?: { status: string; type: string; rating: string };
+      filters?: {
+        status: string;
+        type: string;
+        rating: string;
+        genres: number[];
+      };
     },
     { rejectWithValue }
   ) => {
@@ -84,9 +91,14 @@ export const fetchTopAnimeAsync = createAsyncThunk(
     {
       page = 1,
       filters,
-    }: {
+    }:     {
       page?: number;
-      filters?: { status: string; type: string; rating: string };
+      filters?: {
+        status: string;
+        type: string;
+        rating: string;
+        genres: number[];
+      };
     },
     { rejectWithValue }
   ) => {
@@ -130,6 +142,7 @@ const animeSlice = createSlice({
         status?: string;
         type?: string;
         rating?: string;
+        genres?: number[];
       }>
     ) => {
       if (action.payload.status !== undefined) {
@@ -141,12 +154,16 @@ const animeSlice = createSlice({
       if (action.payload.rating !== undefined) {
         state.filters.rating = action.payload.rating;
       }
+      if (action.payload.genres !== undefined) {
+        state.filters.genres = action.payload.genres;
+      }
     },
     clearFilters: (state) => {
       state.filters = {
         status: '',
         type: '',
         rating: '',
+        genres: [],
       };
     },
     clearResults: (state) => {

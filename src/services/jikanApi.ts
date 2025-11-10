@@ -4,6 +4,8 @@ import type {
   AnimeVideos,
   AnimePicture,
   AnimeRelation,
+  Genre,
+  GenresResponse,
 } from '../types/anime';
 
 const BASE_URL = 'https://api.jikan.moe/v4';
@@ -15,6 +17,7 @@ export interface SearchParams {
     status?: string;
     type?: string;
     rating?: string;
+    genres?: number[];
   };
   signal?: AbortSignal;
 }
@@ -44,6 +47,9 @@ export async function searchAnime({
     }
     if (filters.rating) {
       url.searchParams.set('rating', filters.rating);
+    }
+    if (filters.genres && filters.genres.length > 0) {
+      url.searchParams.set('genres', filters.genres.join(','));
     }
   }
 
@@ -85,6 +91,7 @@ export async function getTopAnime(
     status?: string;
     type?: string;
     rating?: string;
+    genres?: number[];
   },
   signal?: AbortSignal
 ): Promise<SearchResponse> {
@@ -101,6 +108,9 @@ export async function getTopAnime(
     }
     if (filters.rating) {
       url.searchParams.set('rating', filters.rating);
+    }
+    if (filters.genres && filters.genres.length > 0) {
+      url.searchParams.set('genres', filters.genres.join(','));
     }
   }
 
@@ -170,4 +180,21 @@ export async function getAnimeRelations(
 
   const data = await response.json();
   return data.data;
+}
+
+export async function getGenres(
+  signal?: AbortSignal
+): Promise<GenresResponse> {
+  const response = await fetch(`${BASE_URL}/genres/anime`, { signal });
+
+  if (!response.ok) {
+    const error: ApiError = {
+      message: `API request failed with status ${response.status}`,
+      status: response.status,
+    };
+    throw error;
+  }
+
+  const data: GenresResponse = await response.json();
+  return data;
 }

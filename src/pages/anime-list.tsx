@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   searchAnimeAsync,
@@ -16,9 +17,11 @@ import { LoadingSkeleton } from '../components/app/loading-skeleton';
 import { EmptyState } from '../components/app/empty-state';
 import { ErrorMessage } from '../components/app/error-message';
 import { AnimatedBackground } from '../components/app/animated-background';
+import { ExternalLink } from 'lucide-react';
 
 function AnimeListPage() {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const {
     results,
     currentPage,
@@ -29,6 +32,42 @@ function AnimeListPage() {
     hasSearched,
     filters,
   } = useAppSelector((state) => state.anime);
+
+  // Handle navigation from genre bubble chart
+  useEffect(() => {
+    const state = location.state as {
+      genreId?: number;
+      genreName?: string;
+    } | null;
+    if (state?.genreId && state?.genreName) {
+      const genreId = state.genreId;
+      const updatedFilters = {
+        ...filters,
+        genres: [genreId],
+      };
+
+      // Set genre filter
+      dispatch(setFilters(updatedFilters));
+      dispatch(setPage(1));
+
+      // Use existing query if available, otherwise fetch top anime with genre filter
+      if (query.trim()) {
+        dispatch(
+          searchAnimeAsync({
+            query: query.trim(),
+            page: 1,
+            filters: updatedFilters,
+          })
+        );
+      } else {
+        dispatch(fetchTopAnimeAsync({ page: 1, filters: updatedFilters }));
+      }
+
+      // Clear location state to prevent re-triggering
+      window.history.replaceState({}, document.title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
 
   useEffect(() => {
     if (!query.trim() && !hasSearched && results.length === 0) {
@@ -107,7 +146,8 @@ function AnimeListPage() {
     hasSearched ||
     filters.status !== '' ||
     filters.type !== '' ||
-    filters.rating !== '';
+    filters.rating !== '' ||
+    filters.genres.length > 0;
 
   return (
     <div className='min-h-screen bg-white relative'>
@@ -161,17 +201,26 @@ function AnimeListPage() {
 
         {!loading && !error && results.length > 0 && (
           <>
-            <div className='mb-6 text-sm text-foreground/70'>
-              {hasSearched ? (
-                <>
-                  Found {results.length} result{results.length !== 1 ? 's' : ''}{' '}
-                  on page {currentPage} of {totalPages}
-                </>
-              ) : (
-                <>
-                  Top Anime - Page {currentPage} of {totalPages}
-                </>
-              )}
+            <div className='flex justify-between items-center'>
+              <div className='mb-6 text-sm text-foreground/70'>
+                {hasSearched ? (
+                  <>
+                    Found {results.length} result
+                    {results.length !== 1 ? 's' : ''} on page {currentPage} of{' '}
+                    {totalPages}
+                  </>
+                ) : (
+                  <>
+                    Top Anime - Page {currentPage} of {totalPages}
+                  </>
+                )}
+              </div>
+              <Link
+                to='/genres'
+                className='text-primary hover:text-primary-dark flex items-center gap-2 hover:underline hover:underline-offset-4'
+              >
+                Explore by genre: Genres <ExternalLink className='w-4 h-4' />
+              </Link>
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8'>
               {results.map((anime) => (

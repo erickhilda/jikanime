@@ -182,3 +182,14 @@ export interface AnimeRelation {
   relation: string;
   entry: AnimeRelationEntry[];
 }
+
+export interface Genre {
+  mal_id: number;
+  name: string;
+  url: string;
+  count?: number;
+}
+
+export interface GenresResponse {
+  data: Genre[];
+}
