@@ -1,4 +1,10 @@
-import type { Anime, SearchResponse } from '../types/anime';
+import type {
+  Anime,
+  SearchResponse,
+  AnimeVideos,
+  AnimePicture,
+  AnimeRelation,
+} from '../types/anime';
 
 const BASE_URL = 'https://api.jikan.moe/v4';
 
@@ -110,4 +116,58 @@ export async function getTopAnime(
 
   const data: SearchResponse = await response.json();
   return data;
+}
+
+export async function getAnimeVideos(
+  id: number,
+  signal?: AbortSignal
+): Promise<AnimeVideos> {
+  const response = await fetch(`${BASE_URL}/anime/${id}/videos`, { signal });
+
+  if (!response.ok) {
+    const error: ApiError = {
+      message: `API request failed with status ${response.status}`,
+      status: response.status,
+    };
+    throw error;
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+export async function getAnimePictures(
+  id: number,
+  signal?: AbortSignal
+): Promise<AnimePicture[]> {
+  const response = await fetch(`${BASE_URL}/anime/${id}/pictures`, { signal });
+
+  if (!response.ok) {
+    const error: ApiError = {
+      message: `API request failed with status ${response.status}`,
+      status: response.status,
+    };
+    throw error;
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+export async function getAnimeRelations(
+  id: number,
+  signal?: AbortSignal
+): Promise<AnimeRelation[]> {
+  const response = await fetch(`${BASE_URL}/anime/${id}/relations`, { signal });
+
+  if (!response.ok) {
+    const error: ApiError = {
+      message: `API request failed with status ${response.status}`,
+      status: response.status,
+    };
+    throw error;
+  }
+
+  const data = await response.json();
+  return data.data;
 }

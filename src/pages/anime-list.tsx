@@ -15,6 +15,7 @@ import { Pagination } from '../components/app/pagination';
 import { LoadingSkeleton } from '../components/app/loading-skeleton';
 import { EmptyState } from '../components/app/empty-state';
 import { ErrorMessage } from '../components/app/error-message';
+import { AnimatedBackground } from '../components/app/animated-background';
 
 function AnimeListPage() {
   const dispatch = useAppDispatch();
@@ -102,9 +103,16 @@ function AnimeListPage() {
     }
   };
 
+  const hasSearchOrFilter =
+    hasSearched ||
+    filters.status !== '' ||
+    filters.type !== '' ||
+    filters.rating !== '';
+
   return (
-    <div className='min-h-screen bg-white'>
-      <div className='container mx-auto px-4 py-8'>
+    <div className='min-h-screen bg-white relative'>
+      <AnimatedBackground variant='sakura' intensity='medium' />
+      <div className='container mx-auto px-4 py-8 relative z-10'>
         <div className='mb-8'>
           <h1 className='text-4xl font-bold mb-2 text-center'>
             Unleash Your Anime Curiosity
@@ -144,12 +152,12 @@ function AnimeListPage() {
           </div>
         )}
 
-        {!loading && !error && results.length === 0 && (
+        {!loading && !error && results.length === 0 && hasSearchOrFilter ? (
           <EmptyState
             message='No anime found'
             submessage='Try searching with different keywords or filters'
           />
-        )}
+        ) : null}
 
         {!loading && !error && results.length > 0 && (
           <>

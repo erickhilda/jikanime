@@ -136,3 +136,49 @@ export interface Pagination {
   };
 }
 
+export interface AnimeVideoPromo {
+  title: string;
+  image_url: string;
+  video_url: string;
+}
+
+export interface AnimeVideoEpisode {
+  title: string;
+  episode: string;
+  url: string;
+  images: {
+    jpg: {
+      image_url: string;
+    };
+  };
+}
+
+export interface AnimeVideos {
+  promos: AnimeVideoPromo[];
+  episodes: AnimeVideoEpisode[];
+}
+
+export interface AnimePicture {
+  jpg: {
+    image_url: string;
+    small_image_url: string;
+    large_image_url: string;
+  };
+  webp: {
+    image_url: string;
+    small_image_url: string;
+    large_image_url: string;
+  };
+}
+
+export interface AnimeRelationEntry {
+  mal_id: number;
+  type: string;
+  name: string;
+  url: string;
+}
+
+export interface AnimeRelation {
+  relation: string;
+  entry: AnimeRelationEntry[];
+}
