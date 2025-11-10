@@ -144,10 +144,10 @@ function AnimeListPage() {
           </div>
         )}
 
-        {!loading && !error && hasSearched && results.length === 0 && (
+        {!loading && !error && results.length === 0 && (
           <EmptyState
             message='No anime found'
-            submessage='Try searching with different keywords'
+            submessage='Try searching with different keywords or filters'
           />
         )}
 

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -5,6 +6,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { NSFWWarningDialog } from './nsfw-warning-dialog';
+import {
+  hasNSFWConsent,
+  setNSFWConsent,
+  isNSFWRating,
+} from '../../lib/nsfwConsent';
 
 interface AnimeFiltersProps {
   status: string;
@@ -53,6 +60,9 @@ export function AnimeFilters({
   onTypeChange,
   onRatingChange,
 }: AnimeFiltersProps) {
+  const [showNSFWWarning, setShowNSFWWarning] = useState(false);
+  const [pendingRating, setPendingRating] = useState<string | null>(null);
+
   const handleStatusChange = (value: string) => {
     onStatusChange(value === 'all' ? '' : value);
   };
@@ -62,7 +72,39 @@ export function AnimeFilters({
   };
 
   const handleRatingChange = (value: string) => {
-    onRatingChange(value === 'all' ? '' : value);
+    const ratingValue = value === 'all' ? '' : value;
+
+    // Check if the selected rating is NSFW
+    if (ratingValue && isNSFWRating(ratingValue)) {
+      // Check if user has already given consent
+      if (hasNSFWConsent()) {
+        // User has already consented, proceed with filter change
+        onRatingChange(ratingValue);
+      } else {
+        // User hasn't consented yet, show warning dialog
+        setPendingRating(ratingValue);
+        setShowNSFWWarning(true);
+      }
+    } else {
+      // Not an NSFW rating, proceed normally
+      onRatingChange(ratingValue);
+    }
+  };
+
+  const handleNSFWConfirm = () => {
+    // Save consent to localStorage
+    setNSFWConsent(true);
+
+    // Apply the pending rating filter
+    if (pendingRating) {
+      onRatingChange(pendingRating);
+      setPendingRating(null);
+    }
+  };
+
+  const handleNSFWCancel = () => {
+    setPendingRating(null);
+    setShowNSFWWarning(false);
   };
 
   const displayStatus = status === '' ? 'all' : status;
@@ -109,6 +151,18 @@ export function AnimeFilters({
           ))}
         </SelectContent>
       </Select>
+
+      <NSFWWarningDialog
+        open={showNSFWWarning}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleNSFWCancel();
+          } else {
+            setShowNSFWWarning(open);
+          }
+        }}
+        onConfirm={handleNSFWConfirm}
+      />
     </div>
   );
 }
